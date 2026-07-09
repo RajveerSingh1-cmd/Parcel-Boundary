@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parcel Boundary Analyzer — Complete Beginner Guide</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --brand: #6366f1;
+      --brand-light: #e0e7ff;
+      --brand-dark: #4338ca;
+      --green: #10b981;
+      --green-light: #d1fae5;
+      --amber: #f59e0b;
+      --amber-light: #fef3c7;
+      --rose: #f43f5e;
+      --rose-light: #ffe4e6;
+      --blue: #3b82f6;
+      --blue-light: #dbeafe;
+      --surface: #f8fafc;
+      --text: #1e293b;
+      --text-light: #64748b;
+      --border: #e2e8f0;
+      --code-bg: #1e293b;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      color: var(--text);
+      background: #fff;
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .page-break { page-break-after: always; }
+
+    /* Cover Page */
+    .cover {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 30%, #4338ca 60%, #6366f1 100%);
+      color: white;
+      padding: 60px 40px;
+    }
+    .cover-icon {
+      width: 100px;
+      height: 100px;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 32px;
+      font-size: 48px;
+    }
+    .cover h1 {
+      font-size: 42px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 12px;
+    }
+    .cover .subtitle {
+      font-size: 20px;
+      opacity: 0.8;
+      font-weight: 300;
+      margin-bottom: 40px;
+    }
+    .cover .meta {
+      font-size: 13px;
+      opacity: 0.6;
+    }
+
+    /* Main content */
+    .content {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 32px;
+    }
+
+    /* TOC */
+    .toc {
+      background: var(--surface);
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 40px;
+      border: 1px solid var(--border);
+    }
+    .toc h2 {
+      font-size: 22px;
+      margin-bottom: 20px;
+      color: var(--brand);
+    }
+    .toc ol {
+      padding-left: 20px;
+    }
+    .toc li {
+      margin-bottom: 8px;
+      color: var(--text-light);
+    }
+    .toc li strong { color: var(--text); }
+
+    /* Section headers */
+    h2 {
+      font-size: 26px;
+      font-weight: 800;
+      margin: 48px 0 16px;
+      color: var(--brand-dark);
+      border-bottom: 3px solid var(--brand-light);
+      padding-bottom: 8px;
+    }
+    h3 {
+      font-size: 20px;
+      font-weight: 700;
+      margin: 32px 0 12px;
+      color: var(--text);
+    }
+    h4 {
+      font-size: 16px;
+      font-weight: 600;
+      margin: 24px 0 8px;
+      color: var(--text-light);
+    }
+
+    p { margin-bottom: 12px; }
+
+    /* Code blocks */
+    pre {
+      background: var(--code-bg);
+      color: #e2e8f0;
+      border-radius: 12px;
+      padding: 20px;
+      overflow-x: auto;
+      margin: 16px 0;
+      font-family: 'Fira Code', monospace;
+      font-size: 12.5px;
+      line-height: 1.6;
+    }
+
+    code {
+      font-family: 'Fira Code', monospace;
+      font-size: 12.5px;
+    }
+
+    :not(pre) > code {
+      background: var(--brand-light);
+      color: var(--brand-dark);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+
+    /* Info boxes */
+    .info-box {
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin: 16px 0;
+      border-left: 4px solid;
+    }
+    .info-box.concept {
+      background: var(--blue-light);
+      border-color: var(--blue);
+    }
+    .info-box.tip {
+      background: var(--green-light);
+      border-color: var(--green);
+    }
+    .info-box.warning {
+      background: var(--amber-light);
+      border-color: var(--amber);
+    }
+    .info-box.important {
+      background: var(--rose-light);
+      border-color: var(--rose);
+    }
+    .info-box .label {
+      font-weight: 700;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+    .info-box.concept .label { color: var(--blue); }
+    .info-box.tip .label { color: var(--green); }
+    .info-box.warning .label { color: var(--amber); }
+    .info-box.important .label { color: var(--rose); }
+
+    /* Diagram boxes */
+    .diagram {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin: 16px 0;
+      font-family: 'Fira Code', monospace;
+      font-size: 13px;
+      line-height: 1.8;
+      white-space: pre;
+      overflow-x: auto;
+    }
+
+    /* Flow diagram */
+    .flow {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin: 16px 0;
+    }
+    .flow-step {
+      background: var(--brand-light);
+      color: var(--brand-dark);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 13px;
+    }
+    .flow-arrow {
+      color: var(--text-light);
+      font-size: 18px;
+    }
+
+    /* Table */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 13px;
+    }
+    th {
+      background: var(--brand);
+      color: white;
+      padding: 10px 14px;
+      text-align: left;
+      font-weight: 600;
+    }
+    th:first-child { border-radius: 8px 0 0 0; }
+    th:last-child { border-radius: 0 8px 0 0; }
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    tr:nth-child(even) { background: var(--surface); }
+
+    /* Lists */
+    ul, ol { margin: 8px 0 16px 24px; }
+    li { margin-bottom: 6px; }
+
+    /* File label */
+    .file-label {
+      display: inline-block;
+      background: var(--code-bg);
+      color: var(--amber);
+      padding: 4px 12px;
+      border-radius: 6px 6px 0 0;
+      font-family: 'Fira Code', monospace;
+      font-size: 12px;
+      font-weight: 500;
+      margin-bottom: -2px;
+    }
+
+    .separator {
+      height: 2px;
+      background: linear-gradient(90deg, var(--brand-light), var(--brand), var(--brand-light));
+      margin: 48px 0;
+      border-radius: 1px;
+    }
+
+    /* Comment style in code */
+    .cm { color: #94a3b8; }
+    .kw { color: #c084fc; }
+    .fn { color: #38bdf8; }
+    .str { color: #34d399; }
+    .num { color: #fbbf24; }
+
+    @media print {
+      body { font-size: 12px; }
+      .cover { min-height: auto; padding: 40px; }
+      pre { font-size: 11px; padding: 12px; }
+      .content { padding: 20px; }
+      h2 { font-size: 22px; margin-top: 32px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===================== COVER PAGE ===================== -->
+<div class="cover">
+  <div class="cover-icon">🗺️</div>
+  <h1>Parcel Boundary Analyzer</h1>
+  <p class="subtitle">A Complete Beginner's Guide to the Code</p>
+  <p class="meta">
+    Built with React + Vite + Leaflet.js + Tailwind CSS<br>
+    Everything explained step-by-step for beginners
+  </p>
+</div>
+
+<div class="page-break"></div>
+
+<!-- ===================== TABLE OF CONTENTS ===================== -->
+<div class="content">
+
+<div class="toc">
+  <h2>📋 Table of Contents</h2>
+  <ol>
+    <li><strong>What Does This App Do?</strong> — The big picture</li>
+    <li><strong>Technologies Used</strong> — What each tool does and why</li>
+    <li><strong>Project Folder Structure</strong> — Where every file lives</li>
+    <li><strong>How the App Works</strong> — Step-by-step data flow</li>
+    <li><strong>Configuration Files</strong> — package.json, Vite, Tailwind, PostCSS</li>
+    <li><strong>The Entry Point</strong> — index.html and main.jsx</li>
+    <li><strong>Utility Functions (the Brain)</strong>
+      <ol type="a">
+        <li>distance.js — Haversine Formula</li>
+        <li>parser.js — File Parsing</li>
+        <li>closestPair.js — The Algorithm</li>
+      </ol>
+    </li>
+    <li><strong>Web Worker</strong> — Background Processing</li>
+    <li><strong>React Components (the UI)</strong>
+      <ol type="a">
+        <li>App.jsx — The Main Controller</li>
+        <li>Sidebar.jsx — Layout Container</li>
+        <li>Upload.jsx — File Upload</li>
+        <li>ResultsPanel.jsx — Results Display</li>
+        <li>MapView.jsx — Interactive Map</li>
+        <li>Legend.jsx & LoadingSpinner.jsx</li>
+      </ol>
+    </li>
+    <li><strong>Styling</strong> — CSS and Tailwind</li>
+    <li><strong>Key Concepts Explained</strong> — React hooks, Web Workers, etc.</li>
+    <li><strong>How to Run the App</strong></li>
+    <li><strong>Sample Test File</strong></li>
+  </ol>
+</div>
+
+<div class="page-break"></div>
+
+<!-- ===================== SECTION 1 ===================== -->
+<h2>1. What Does This App Do?</h2>
+
+<p>The <strong>Parcel Boundary Analyzer</strong> is a web application designed for urban planners. Here's what it does in simple terms:</p>
+
+<ol>
+  <li><strong>Upload</strong> — You upload a text file containing geographic coordinates (latitude & longitude points)</li>
+  <li><strong>Parse</strong> — The app reads the file, extracts valid coordinates, and skips bad ones</li>
+  <li><strong>Analyze</strong> — It finds the <strong>two closest points</strong> using a smart algorithm</li>
+  <li><strong>Visualize</strong> — It shows everything on an interactive map</li>
+</ol>
+
+<div class="info-box concept">
+  <p class="label">💡 Real-World Use Case</p>
+  <p>Imagine you're an urban planner with hundreds of boundary points for land parcels. You need to find which two boundary markers are closest together — maybe to check for overlap or potential conflicts. This app does that automatically!</p>
+</div>
+
+<h3>What is a "Parcel"?</h3>
+<p>In urban planning, a <strong>parcel</strong> is a piece of land. Each parcel has <strong>boundary points</strong> — the corners that define its shape. When you connect these points, you get the parcel boundary (a polygon shape on the map).</p>
+
+<div class="page-break"></div>
+
+<!-- ===================== SECTION 2 ===================== -->
+<h2>2. Technologies Used</h2>
+
+<p>This app uses several tools. Here's what each one does:</p>
+
+<table>
+  <tr>
+    <th>Technology</th>
+    <th>What It Is</th>
+    <th>Why We Use It</th>
+  </tr>
+  <tr>
+    <td><strong>React</strong></td>
+    <td>A JavaScript library for building user interfaces</td>
+    <td>Makes it easy to build interactive UIs with reusable "components"</td>
+  </tr>
+  <tr>
+    <td><strong>Vite</strong></td>
+    <td>A build tool / dev server</td>
+    <td>Starts your project super fast, handles imports, bundles code for production</td>
+  </tr>
+  <tr>
+    <td><strong>Tailwind CSS</strong></td>
+    <td>A CSS framework with pre-made utility classes</td>
+    <td>Instead of writing CSS from scratch, you use classes like <code>text-red-500</code></td>
+  </tr>
+  <tr>
+    <td><strong>Leaflet.js</strong></td>
+    <td>A mapping library</td>
+    <td>Shows interactive maps with markers, polygons, zoom, etc.</td>
+  </tr>
+  <tr>
+    <td><strong>react-leaflet</strong></td>
+    <td>React wrapper for Leaflet</td>
+    <td>Lets us use Leaflet as React components like <code>&lt;MapContainer&gt;</code></td>
+  </tr>
+  <tr>
+    <td><strong>Web Workers</strong></td>
+    <td>Built-in browser feature</td>
+    <td>Runs heavy computations in the background without freezing the UI</td>
+  </tr>
+</table>
+
+<div class="info-box tip">
+  <p class="label">🟢 Think of it like this</p>
+  <p><strong>React</strong> = the building blocks of the UI<br>
+  <strong>Vite</strong> = the construction machine that assembles everything<br>
+  <strong>Tailwind</strong> = the paint and decoration<br>
+  <strong>Leaflet</strong> = the map canvas<br>
+  <strong>Web Workers</strong> = a helper who does math while you keep using the app</p>
+</div>
+
+<div class="page-break"></div>
+
+<!-- ===================== SECTION 3 ===================== -->
+<h2>3. Project Folder Structure</h2>
+
+<p>Here's how all the files are organized:</p>
+
+<div class="diagram">farhan/                          ← Project root
+├── index.html                   ← The single HTML page (entry point)
+├── package.json                 ← Project info + dependencies list
+├── vite.config.js               ← Vite configuration
+├── tailwind.config.js           ← Tailwind CSS configuration
+├── postcss.config.js            ← PostCSS configuration (needed by Tailwind)
+│
+├── public/
+│   └── sample-data.txt          ← Test data file with 20 coordinates
+│
+└── src/                         ← All source code lives here
+    ├── main.jsx                 ← Entry point — mounts React app
+    ├── App.jsx                  ← Main app component (the "brain")
+    ├── index.css                ← Global styles + Tailwind directives
+    │
+    ├── components/              ← UI building blocks
+    │   ├── Sidebar.jsx          ← Left sidebar layout
+    │   ├── Upload.jsx           ← File upload with drag & drop
+    │   ├── ResultsPanel.jsx     ← Shows parsing + algorithm results
+    │   ├── MapView.jsx          ← The Leaflet interactive map
+    │   ├── Legend.jsx           ← Map legend
+    │   └── LoadingSpinner.jsx   ← Spinning loader animation
+    │
+    ├── utils/                   ← Pure logic (no UI)
+    │   ├── distance.js          ← Haversine distance formula
+    │   ├── parser.js            ← Text file parser
+    │   └── closestPair.js       ← Closest pair algorithm
+    │
+    └── workers/
+        └── compute.worker.js    ← Web Worker for background tasks</div>
+
+<div class="info-box concept">
+  <p class="label">💡 Why separate folders?</p>
+  <p><strong>components/</strong> = What the user sees (buttons, panels, map)<br>
+  <strong>utils/</strong> = Pure math and logic (no visual elements)<br>
+  <strong>workers/</strong> = Background threads for heavy processing<br><br>
+  This separation is called <strong>"Separation of Concerns"</strong> — each file has ONE job. This makes code easier to understand, test, and fix.</p>
+</div>
+
+<div class="page-break"></div>
+
+<!-- ===================== SECTION 4 ===================== -->
+<h2>4. How the App Works — Data Flow</h2>
+
+<p>When you upload a file, here's exactly what happens, step by step:</p>
+
+<div class="flow">
+  <span class="flow-step">📁 User drops file</span>
+  <span class="flow-arrow">→</span>
+  <span class="flow-step">Upload.jsx reads it</span>
+  <span class="flow-arrow">→</span>
+  <span class="flow-step">App.jsx receives text</span>
+  <span class="flow-arrow">→</span>
+  <span class="flow-step">parser.js extracts points</span>
+  <span class="flow-arrow">→</span>
+  <span class="flow-step">closestPair.js finds pair</span>
+  <span class="flow-arrow">→</span>
+  <span class="flow-step">🗺️ Map shows results</span>
+</div>
+
+<h3>Detailed Flow:</h3>
+<ol>
+  <li><strong>User drags a .txt file</strong> onto the upload zone</li>
+  <li><strong>Upload.jsx</strong> uses the browser's <code>FileReader</code> API to read the file as text</li>
+  <li><strong>App.jsx</strong> receives the text via a callback function</li>
+  <li>App checks the file size:
+    <ul>
+      <li><strong>Small file (&lt; 5,000 lines)</strong> → processes directly on the main thread</li>
+      <li><strong>Large file (≥ 5,000 lines)</strong> → sends to a Web Worker (background thread)</li>
+    </ul>
+  </li>
+  <li><strong>parser.js</strong> reads each line, extracts lat/lon/id, and skips bad lines</li>
+  <li><strong>closestPair.js</strong> finds the two closest points:
+    <ul>
+      <li><strong>Under 1,000 points</strong> → uses brute force (compare every pair)</li>
+      <li><strong>1,000+ points</strong> → uses divide & conquer (much faster)</li>
+    </ul>
+  </li>
+  <li><strong>distance.js</strong> calculates real-world distance using the Haversine formula</li>
+  <li>Results are stored in React state → triggers a re-render</li>
+  <li><strong>MapView.jsx</strong> plots markers, polygons, and the closest pair line</li>
+  <li><strong>ResultsPanel.jsx</strong> shows the numbers in the sidebar</li>
+</ol>
+
+<div class="page-break"></div>
+
+<!-- ===================== SECTION 5 ===================== -->
+<h2>5. Configuration Files Explained</h2>
+
+<h3>📄 package.json</h3>
+<p>This is the "identity card" of your project. It tells npm (Node Package Manager) what your project needs.</p>
+
+<pre><span class="cm">// Key parts of package.json:</span>
+{
+  <span class="str">"name"</span>: <span class="str">"farhan"</span>,                  <span class="cm">// Project name</span>
+  <span class="str">"scripts"</span>: {
+    <span class="str">"dev"</span>: <span class="str">"vite"</span>,                   <span class="cm">// Run: npm run dev → starts dev server</span>
+    <span class="str">"build"</span>: <span class="str">"vite build"</span>,           <span class="cm">// Run: npm run build → creates production files</span>
+  },
+  <span class="str">"dependencies"</span>: {                    <span class="cm">// Libraries your app NEEDS to run</span>
+    <span class="str">"react"</span>: <span class="str">"..."</span>,                  <span class="cm">// The React library</span>
+    <span class="str">"react-dom"</span>: <span class="str">"..."</span>,              <span class="cm">// React's bridge to the browser DOM</span>
+    <span class="str">"leaflet"</span>: <span class="str">"..."</span>,                <span class="cm">// Mapping library</span>
+    <span class="str">"react-leaflet"</span>: <span class="str">"..."</span>,           <span class="cm">// React wrapper for Leaflet</span>
+    <span class="str">"react-leaflet-cluster"</span>: <span class="str">"..."</span>,    <span class="cm">// Groups nearby markers</span>
+  },
+  <span class="str">"devDependencies"</span>: {                 <span class="cm">// Tools needed only during development</span>
+    <span class="str">"tailwindcss"</span>: <span class="str">"..."</span>,              <span class="cm">// CSS framework</span>
+    <span class="str">"postcss"</span>: <span class="str">"..."</span>,                 <span class="cm">// CSS processing tool</span>
+    <span class="str">"autoprefixer"</span>: <span class="str">"..."</span>,            <span class="cm">// Adds browser prefixes to CSS</span>
+  }
+}</pre>
+
+<h3>📄 vite.config.js</h3>
+<div class="file-label">vite.config.js</div>
+<pre><span class="kw">import</span> { defineConfig } <span class="kw">from</span> <span class="str">'vite'</span>
+<span class="kw">import</span> react <span class="kw">from</span> <span class="str">'@vitejs/plugin-react'</span>
+
+<span class="kw">export default</span> <span class="fn">defineConfig</span>({
+  plugins: [<span class="fn">react</span>()],    <span class="cm">// Tells Vite: "I'm using React, handle JSX for me"</span>
+})</pre>
+
+<div class="info-box concept">
+  <p class="label">💡 What is JSX?</p>
+  <p>JSX is a syntax that lets you write HTML-like code inside JavaScript. For example: <code>&lt;div className="hello"&gt;Hi&lt;/div&gt;</code>. Browsers don't understand JSX natively — Vite converts it to regular JavaScript behind the scenes.</p>
+</div>
+
+<h3>📄 tailwind.config.js</h3>
+<p>This tells Tailwind which files to scan for class names and defines custom colors.</p>
+<pre><span class="kw">export default</span> {
+  content: [<span class="str">'./index.html'</span>, <span class="str">'./src/**/*.{js,jsx}'</span>],  <span class="cm">// Files to scan</span>
+  darkMode: <span class="str">'class'</span>,         <span class="cm">// Dark mode activated by adding 'dark' class to &lt;html&gt;</span>
+  theme: {
+    extend: {
+      colors: {
+        brand: {              <span class="cm">// Custom color palette (indigo shades)</span>
+          <span class="num">500</span>: <span class="str">'#6366f1'</span>,    <span class="cm">// Use as: text-brand-500, bg-brand-500</span>
+          <span class="num">700</span>: <span class="str">'#4338ca'</span>,
+        },
+        surface: {            <span class="cm">// Custom background colors</span>
+          <span class="num">50</span>: <span class="str">'#f8fafc'</span>,     <span class="cm">// Light mode background</span>
+          <span class="num">900</span>: <span class="str">'#020617'</span>,    <span class="cm">// Dark mode background</span>
+        }
+      }
+    }
+  }
+}</pre>
+
+<h3>📄 postcss.config.js</h3>
+<pre><span class="kw">export default</span> {
+  plugins: {
+    tailwindcss: {},     <span class="cm">// Step 1: Process Tailwind directives</span>
+    autoprefixer: {},    <span class="cm">// Step 2: Add browser-specific prefixes (-webkit-, etc.)</span>
+  },
+}</pre>
+
+<div class="info-box tip">
+  <p class="label">🟢 How CSS is processed</p>
+  <p>Your CSS goes through a pipeline: <strong>Your CSS → PostCSS → Tailwind (expands @tailwind) → Autoprefixer (adds -webkit- etc.) → Final CSS</strong></p>
+</div>
+
+<div class="page-break"></div>
+
+<!-- ===================== SECTION 6 ===================== -->
+<h2>6. The Entry Point — How the App Starts</h2>
+
+<h3>📄 index.html</h3>
+<p>This is the ONE and ONLY HTML page. React renders everything inside the <code>&lt;div id="root"&gt;</code>.</p>
+
+<pre><span class="cm">&lt;!-- The HTML structure --&gt;</span>
+&lt;!doctype html&gt;
+&lt;html lang=<span class="str">"en"</span>&gt;
+  &lt;head&gt;
+    &lt;meta charset=<span class="str">"UTF-8"</span> /&gt;
+    &lt;meta name=<span class="str">"viewport"</span> content=<span class="str">"width=device-width, initial-scale=1.0"</span> /&gt;
+    &lt;meta name=<span class="str">"description"</span> content=<span class="str">"Parcel Boundary Analyzer..."</span> /&gt;
+    &lt;title&gt;Parcel Boundary Analyzer&lt;/title&gt;
+    <span class="cm">&lt;!-- Google Font: Inter --&gt;</span>
+    &lt;link href=<span class="str">"https://fonts.googleapis.com/css2?family=Inter..."</span> rel=<span class="str">"stylesheet"</span> /&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div id=<span class="str">"root"</span>&gt;&lt;/div&gt;           <span class="cm">&lt;!-- React renders EVERYTHING here --&gt;</span>
+    &lt;script type=<span class="str">"module"</span> src=<span class="str">"/src/main.jsx"</span>&gt;&lt;/script&gt;  <span class="cm">&lt;!-- Loads React --&gt;</span>
+  &lt;/body&gt;
+&lt;/html&gt;</pre>
+
+<h3>📄 main.jsx</h3>
+<p>This file takes the React <code>App</code> component and puts it inside the <code>#root</code> div.</p>
+
+<div class="file-label">src/main.jsx</div>
+<pre><span class="kw">import</span> { StrictMode } <span class="kw">from</span> <span class="str">'react'</span>;
+<span class="kw">import</span> { createRoot } <span class="kw">from</span> <span class="str">'react-dom/client'</span>;
+<span class="kw">import</span> <span class="str">'./index.css'</span>;         <span class="cm">// Load all styles (including Tailwind)</span>
+<span class="kw">import</span> App <span class="kw">from</span> <span class="str">'./App.jsx'</span>;
+
+<span class="cm">// Find the &lt;div id="root"&gt; and render our App inside it</span>
+<span class="fn">createRoot</span>(document.<span class="fn">getElementById</span>(<span class="str">'root'</span>)).<span class="fn">render</span>(
+  &lt;StrictMode&gt;   <span class="cm">{/* StrictMode helps catch bugs during development */}</span>
+    &lt;App /&gt;
+  &lt;/StrictMode&gt;
+);</pre>
+
+<div class="info-box concept">
+  <p class="label">💡 What is "rendering"?</p>
+  <p><strong>Rendering</strong> means React takes your component code (JSX) and converts it into actual HTML elements that appear on screen. When data changes (like uploading a file), React automatically <strong>re-renders</strong> only the parts that changed — this is what makes React fast!</p>
+</div>
+
+<div class="page-break"></div>
+
+<!-- ===================== SECTION 7 ===================== -->
+<h2>7. Utility Functions — The Brain 🧠</h2>
+
+<p>These files contain pure logic — no buttons, no colors, just math. They are in the <code>utils/</code> folder.</p>
+
+<h3>7a. distance.js — The Haversine Formula</h3>
+
+<p><strong>Problem:</strong> Earth is a sphere, not a flat surface. You can't just use the Pythagorean theorem (a² + b² = c²) to find the distance between two GPS coordinates. You need a formula that accounts for the curve of the Earth.</p>
+
+<p><strong>Solution:</strong> The <strong>Haversine formula</strong> calculates the shortest distance between two points on a sphere (called the "great-circle distance").</p>
+
+<div class="file-label">src/utils/distance.js</div>
+<pre><span class="kw">export function</span> <span class="fn">haversineDistance</span>(lat1, lon1, lat2, lon2) {
+  <span class="kw">const</span> R = <span class="num">6371000</span>;  <span class="cm">// Earth's radius in meters (≈ 6,371 km)</span>
+
+  <span class="cm">// Step 1: Convert degrees to radians (math requires radians)</span>
+  <span class="kw">const</span> toRad = (deg) => (deg * Math.PI) / <span class="num">180</span>;
+
+  <span class="cm">// Step 2: Find the differences in latitude and longitude</span>
+  <span class="kw">const</span> dLat = <span class="fn">toRad</span>(lat2 - lat1);   <span class="cm">// Δ latitude in radians</span>
+  <span class="kw">const</span> dLon = <span class="fn">toRad</span>(lon2 - lon1);   <span class="cm">// Δ longitude in radians</span>
+
+  <span class="cm">// Step 3: Apply the Haversine formula</span>
+  <span class="kw">const</span> a =
+    Math.<span class="fn">sin</span>(dLat / <span class="num">2</span>) * Math.<span class="fn">sin</span>(dLat / <span class="num">2</span>) +           <span class="cm">// sin²(Δlat/2)</span>
+    Math.<span class="fn">cos</span>(<span class="fn">toRad</span>(lat1)) * Math.<span class="fn">cos</span>(<span class="fn">toRad</span>(lat2)) *   <span class="cm">// cos(lat1)·cos(lat2)</span>
+    Math.<span class="fn">sin</span>(dLon / <span class="num">2</span>) * Math.<span class="fn">sin</span>(dLon / <span class="num">2</span>);             <span class="cm">// · sin²(Δlon/2)</span>
+
+  <span class="cm">// Step 4: Calculate angular distance</span>
+  <span class="kw">const</span> c = <span class="num">2</span> * Math.<span class="fn">atan2</span>(Math.<span class="fn">sqrt</span>(a), Math.<span class="fn">sqrt</span>(<span class="num">1</span> - a));
+
+  <span class="cm">// Step 5: Multiply by Earth's radius to get meters</span>
+  <span class="kw">return</span> R * c;
+}</pre>
+
+<div class="info-box concept">
+  <p class="label">💡 Haversine in Plain English</p>
+  <p>Imagine stretching a string between two cities on a globe. The Haversine formula calculates the <em>length</em> of that string. It gives you the <strong>shortest path along Earth's surface</strong> (not a straight tunnel through the Earth).</p>
+  <p><br><strong>Example:</strong> New York (40.7128, -74.0060) to the Statue of Liberty (40.6892, -74.0445) ≈ 2,836 meters.</p>
+</div>
+
+<div class="page-break"></div>
+
+<h3>7b. parser.js — Reading the Coordinate File</h3>
+
+<p>This function takes raw text from a file and extracts coordinate points from it.</p>
+
+<h4>What it handles:</h4>
+<table>
+  <tr><th>Input Format</th><th>Example</th></tr>
+  <tr><td>Comma-separated</td><td><code>40.7128,-74.0060</code></td></tr>
+  <tr><td>Space-separated</td><td><code>40.7128 -74.0060</code></td></tr>
+  <tr><td>With parcel ID</td><td><code>40.7128,-74.0060,A1</code></td></tr>
+  <tr><td>With header row</td><td><code>lat,lon,id</code> (auto-detected and skipped)</td></tr>
+</table>
+
+<div class="file-label">src/utils/parser.js</div>
+<pre><span class="kw">export function</span> <span class="fn">parseCoordinates</span>(text) {
+  <span class="cm">// Split text into lines, remove empty lines</span>
+  <span class="kw">const</span> lines = text.<span class="fn">split</span>(/\r?\n/).<span class="fn">filter</span>(l => l.<span class="fn">trim</span>() !== <span class="str">''</span>);
+  <span class="kw">const</span> points = [];     <span class="cm">// Good coordinates go here</span>
+  <span class="kw">const</span> skipped = [];    <span class="cm">// Bad lines go here (with reason)</span>
+
+  <span class="cm">// Detect header: does the first line have letters (like "lat,lon")?</span>
+  <span class="kw">const</span> firstLine = lines[<span class="num">0</span>].<span class="fn">trim</span>();
+  <span class="kw">if</span> (/[a-df-zA-DF-Z]/.<span class="fn">test</span>(firstLine)) {
+    hasHeader = <span class="kw">true</span>;     <span class="cm">// Skip this line</span>
+  }
+
+  <span class="cm">// Process each line</span>
+  <span class="kw">for</span> (<span class="kw">let</span> i = startIdx; i &lt; lines.length; i++) {
+    <span class="kw">try</span> {
+      <span class="kw">const</span> parsed = <span class="fn">parseLine</span>(line, i + <span class="num">1</span>);  <span class="cm">// Try to parse it</span>
+      points.<span class="fn">push</span>(parsed);                    <span class="cm">// Success! Add to good list</span>
+    } <span class="kw">catch</span> (err) {
+      skipped.<span class="fn">push</span>({ line: i+<span class="num">1</span>, reason: err.message }); <span class="cm">// Bad line, record why</span>
+    }
+  }
+
+  <span class="kw">return</span> { points, skipped, totalLines };
+}
+
+<span class="cm">// Parse ONE line → { lat, lon, id }</span>
+<span class="kw">function</span> <span class="fn">parseLine</span>(line) {
+  <span class="cm">// Split by comma or space</span>
+  <span class="kw">let</span> parts = line.<span class="fn">includes</span>(<span class="str">','</span>)
+    ? line.<span class="fn">split</span>(<span class="str">','</span>)       <span class="cm">// "40.71,-74.00" → ["40.71", "-74.00"]</span>
+    : line.<span class="fn">split</span>(/\s+/);    <span class="cm">// "40.71 -74.00" → ["40.71", "-74.00"]</span>
+
+  <span class="kw">const</span> lat = <span class="fn">parseFloat</span>(parts[<span class="num">0</span>]);   <span class="cm">// Convert string → number</span>
+  <span class="kw">const</span> lon = <span class="fn">parseFloat</span>(parts[<span class="num">1</span>]);
+  <span class="kw">const</span> id  = parts[<span class="num">2</span>] || <span class="kw">null</span>;       <span class="cm">// Optional parcel ID</span>
+
+  <span class="cm">// Validate: latitude must be -90 to 90, longitude -180 to 180</span>
+  <span class="kw">if</span> (lat &lt; <span class="num">-90</span> || lat &gt; <span class="num">90</span>) <span class="kw">throw new</span> Error(<span class="str">'Latitude out of range'</span>);
+  <span class="kw">if</span> (lon &lt; <span class="num">-180</span> || lon &gt; <span class="num">180</span>) <span class="kw">throw new</span> Error(<span class="str">'Longitude out of range'</span>);
+
+  <span class="kw">return</span> { lat, lon, id };
+}</pre>
+
+<div class="info-box tip">
+  <p class="label">🟢 Why use try/catch?</p>
+  <p>If one line is bad (like "hello,world"), we don't want the WHOLE file to fail. The <code>try/catch</code> pattern catches the error for that line, records it, and moves on to the next line. This is called <strong>graceful error handling</strong>.</p>
+</div>
+
+<div class="page-break"></div>
+
+<h3>7c. closestPair.js — The Core Algorithm</h3>
+
+<p>This file contains two algorithms to find the two closest points:</p>
+
+<h4>Algorithm 1: Brute Force (for &lt; 1,000 points)</h4>
+<p><strong>Idea:</strong> Compare EVERY pair of points. Simple but slow for large datasets.</p>
+
+<pre><span class="cm">// Compare every pair: (A,B), (A,C), (A,D), (B,C), (B,D), (C,D), ...</span>
+<span class="kw">for</span> (i = <span class="num">0</span>; i &lt; points.length; i++) {
+  <span class="kw">for</span> (j = i + <span class="num">1</span>; j &lt; points.length; j++) {
+    distance = <span class="fn">haversineDistance</span>(points[i], points[j]);
+    <span class="kw">if</span> (distance &lt; minimum) {
+      minimum = distance;   <span class="cm">// Found a closer pair!</span>
+    }
+  }
+}</pre>
+
+<div class="info-box warning">
+  <p class="label">⚠️ Performance</p>
+  <p><strong>Brute force with 1,000 points</strong> = 499,500 distance calculations<br>
+  <strong>Brute force with 10,000 points</strong> = 49,995,000 calculations ← TOO SLOW!<br>
+  That's why we use a faster algorithm for large datasets.</p>
+</div>
+
+<h4>Algorithm 2: Divide and Conquer (for ≥ 1,000 points)</h4>
+<p><strong>Idea:</strong> Split the problem in half, solve each half, then check the boundary.</p>
+
+<pre><span class="cm">// Simplified steps:</span>
+
+<span class="cm">// 1. Sort all points by latitude (left to right)</span>
+<span class="cm">// 2. Split into LEFT half and RIGHT half</span>
+<span class="cm">// 3. Find closest pair in LEFT half  (recursion!)</span>
+<span class="cm">// 4. Find closest pair in RIGHT half (recursion!)</span>
+<span class="cm">// 5. Take the smaller of those two distances → call it δ (delta)</span>
+<span class="cm">// 6. Check the "strip" near the middle line</span>
+<span class="cm">//    (closest pair might span left-right, but must be within δ)</span>
+<span class="cm">// 7. Return the overall closest pair</span></pre>
+
+<div class="diagram">         LEFT HALF          │          RIGHT HALF
+                             │
+    •       •                │              •
+        •                    │          •       •
+    •          •             │      •
+                             │
+    ←── Find closest ──→     │    ←── Find closest ──→
+                             │
+         Then check the "strip" around the middle line
+               ◄──── δ ────►│◄──── δ ────►
+</div>
+
+<div class="info-box concept">
+  <p class="label">💡 Why is Divide and Conquer faster?</p>
+  <p><strong>Brute force:</strong> O(n²) — 10,000 points = ~50 million comparisons<br>
+  <strong>Divide & Conquer:</strong> O(n log n) — 10,000 points = ~130,000 comparisons<br><br>
+  That's <strong>380x fewer calculations!</strong> The "trick" is that by splitting the problem, we eliminate most pairs from consideration.</p>
+</div>
+
+<div class="page-break"></div>
+
+<!-- ===================== SECTION 8 ===================== -->
+<h2>8. Web Worker — Background Processing</h2>
+
+<h3>The Problem</h3>
+<p>JavaScript runs on a <strong>single thread</strong> by default. If you do heavy math (like computing distances for 10,000 points), the browser <strong>freezes</strong> — buttons stop working, animations freeze, the page becomes unresponsive.</p>
+
+<h3>The Solution: Web Workers</h3>
+<p>A <strong>Web Worker</strong> runs JavaScript in a separate background thread. The main thread (UI) stays responsive while the worker does the heavy lifting.</p>
+
+<div class="diagram">
+  ┌─────────────────────┐         ┌─────────────────────┐
+  │    MAIN THREAD      │         │    WEB WORKER       │
+  │    (UI stays fast)  │         │    (background)     │
+  │                     │         │                     │
+  │  User clicks button │────────►│  Parse 10,000 lines │
+  │  Spinner shown      │         │  Find closest pair  │
+  │  Map still works    │         │  Calculate distance │
+  │                     │◄────────│  Send back results  │
+  │  Display results    │         │                     │
+  └─────────────────────┘         └─────────────────────┘
+         postMessage() ←──── Communication ────→ postMessage()
+</div>
+
+<div class="file-label">src/workers/compute.worker.js</div>
+<pre><span class="kw">import</span> { parseCoordinates } <span class="kw">from</span> <span class="str">'../utils/parser.js'</span>;
+<span class="kw">import</span> { findClosestPair } <span class="kw">from</span> <span class="str">'../utils/closestPair.js'</span>;
+
+<span class="cm">// Listen for messages from the main thread</span>
+self.<span class="fn">onmessage</span> = <span class="kw">function</span>(e) {
+  <span class="kw">const</span> { type, payload } = e.data;
+
+  <span class="kw">if</span> (type === <span class="str">'parse'</span>) {
+    <span class="cm">// Parse the file text</span>
+    <span class="kw">const</span> result = <span class="fn">parseCoordinates</span>(payload.text);
+    self.<span class="fn">postMessage</span>({ type: <span class="str">'parseResult'</span>, data: result });
+    <span class="cm">// ↑ Send results back to main thread</span>
+  }
+
+  <span class="kw">if</span> (type === <span class="str">'compute'</span>) {
+    <span class="cm">// Find the closest pair</span>
+    <span class="kw">const</span> start = performance.<span class="fn">now</span>();
+    <span class="kw">const</span> result = <span class="fn">findClosestPair</span>(payload.points);
+    <span class="kw">const</span> elapsed = performance.<span class="fn">now</span>() - start;
+    self.<span class="fn">postMessage</span>({
+      type: <span class="str">'computeResult'</span>,
+      data: { ...result, computeTime: elapsed }
+    });
+  }
+};</pre>
+
+<div class="info-box concept">
+  <p class="label">💡 How Workers Communicate</p>
+  <p>Workers can't touch the DOM (no <code>document.getElementById</code>). They can only send and receive messages using <code>postMessage()</code> and <code>onmessage</code>. Think of it like passing notes — the worker sends a note with the answer, and the main thread reads it.</p>
+</div>
+
+<div class="page-break"></div>
+
+<!-- ===================== SECTION 9 ===================== -->
+<h2>9. React Components — The UI 🎨</h2>
+
+<h3>9a. App.jsx — The Main Controller</h3>
+
+<p>This is the "brain" of the app. It manages all the data (state) and passes it to child components.</p>
+
+<h4>State Variables (the data the app tracks):</h4>
+<table>
+  <tr><th>Variable</th><th>Type</th><th>What It Stores</th></tr>
+  <tr><td><code>darkMode</code></td><td>boolean</td><td>Is dark mode on?</td></tr>
+  <tr><td><code>parseResult</code></td><td>object</td><td>Points, skipped lines, totals from parsing</td></tr>
+  <tr><td><code>closestPair</code></td><td>object</td><td>The two closest points + distance</td></tr>
+  <tr><td><code>computeTime</code></td><td>number</td><td>How long the algorithm took (ms)</td></tr>
+  <tr><td><code>isProcessing</code></td><td>boolean</td><td>Is the app currently working?</td></tr>
+  <tr><td><code>statusMessage</code></td><td>string</td><td>"Parsing file..." or "Computing..."</td></tr>
+</table>
+
+<h4>Component Tree (Parent → Children):</h4>
+<div class="diagram">
+  App.jsx
+  ├── Sidebar.jsx
+  │   ├── Upload.jsx          ← File upload zone
+  │   ├── LoadingSpinner.jsx  ← Shown while processing
+  │   ├── ResultsPanel.jsx    ← Numbers & stats
+  │   └── Legend.jsx          ← Map legend
+  └── MapView.jsx             ← The interactive map
+</div>
+
+<h4>Key Logic — handleFileLoaded function:</h4>
+<pre><span class="kw">const</span> <span class="fn">handleFileLoaded</span> = (text, fileName) => {
+  <span class="cm">// 1. Show loading state</span>
+  <span class="fn">setIsProcessing</span>(<span class="kw">true</span>);
+
+  <span class="cm">// 2. Count lines to decide: worker or inline?</span>
+  <span class="kw">const</span> lineCount = text.<span class="fn">split</span>(<span class="str">'\n'</span>).length;
+
+  <span class="kw">if</span> (lineCount > <span class="num">5000</span>) {
+    <span class="cm">// LARGE FILE: use Web Worker (doesn't freeze UI)</span>
+    <span class="kw">const</span> worker = <span class="kw">new</span> <span class="fn">Worker</span>(<span class="str">'compute.worker.js'</span>);
+    worker.<span class="fn">postMessage</span>({ type: <span class="str">'parse'</span>, payload: { text } });
+    worker.<span class="fn">onmessage</span> = (e) => { <span class="cm">/* handle results */</span> };
+  } <span class="kw">else</span> {
+    <span class="cm">// SMALL FILE: process directly (fast enough)</span>
+    <span class="kw">const</span> result = <span class="fn">parseCoordinates</span>(text);
+    <span class="kw">const</span> pair = <span class="fn">findClosestPair</span>(result.points);
+    <span class="cm">// Update state → triggers re-render → map + panel update</span>
+  }
+};</pre>
+
+<div class="page-break"></div>
+
+<h3>9b. Upload.jsx — File Upload Component</h3>
+
+<p>This component handles file selection via <strong>click</strong> or <strong>drag-and-drop</strong>.</p>
+
+<h4>Key Concepts Used:</h4>
+<ul>
+  <li><code>useRef</code> — References the hidden <code>&lt;input type="file"&gt;</code> element</li>
+  <li><code>useCallback</code> — Memoizes functions so they don't get re-created every render</li>
+  <li><code>FileReader</code> — Browser API that reads files as text</li>
+  <li><code>onDrop / onDragOver</code> — HTML5 drag-and-drop events</li>
+</ul>
+
+<h4>How drag-and-drop works:</h4>
+<pre><span class="cm">// 1. User drags file over the zone</span>
+<span class="fn">onDragOver</span> = (e) => {
+  e.<span class="fn">preventDefault</span>();     <span class="cm">// Required! Browser would open the file otherwise</span>
+  <span class="fn">setDragOver</span>(<span class="kw">true</span>);      <span class="cm">// Highlight the drop zone</span>
+};
+
+<span class="cm">// 2. User drops the file</span>
+<span class="fn">onDrop</span> = (e) => {
+  e.<span class="fn">preventDefault</span>();
+  <span class="kw">const</span> file = e.dataTransfer.files[<span class="num">0</span>];  <span class="cm">// Get the dropped file</span>
+  <span class="fn">handleFile</span>(file);
+};
+
+<span class="cm">// 3. Read the file content</span>
+<span class="fn">handleFile</span> = (file) => {
+  <span class="kw">const</span> reader = <span class="kw">new</span> FileReader();
+  reader.<span class="fn">onload</span> = (e) => <span class="fn">onFileLoaded</span>(e.target.result);
+  reader.<span class="fn">readAsText</span>(file);    <span class="cm">// Read as plain text string</span>
+};</pre>
+
+<div class="page-break"></div>
+
+<h3>9c. MapView.jsx — The Interactive Map</h3>
+
+<p>The biggest component. It uses <code>react-leaflet</code> to render an interactive map.</p>
+
+<h4>What it renders:</h4>
+<table>
+  <tr><th>Element</th><th>Component</th><th>Purpose</th></tr>
+  <tr><td>Map tiles (background)</td><td><code>&lt;TileLayer&gt;</code></td><td>Loads map images from CARTO (light or dark theme)</td></tr>
+  <tr><td>Point markers</td><td><code>&lt;Marker&gt;</code></td><td>Colored dots for each coordinate</td></tr>
+  <tr><td>Marker clusters</td><td><code>&lt;MarkerClusterGroup&gt;</code></td><td>Groups nearby markers when zoomed out</td></tr>
+  <tr><td>Parcel polygons</td><td><code>&lt;Polygon&gt;</code></td><td>Connects points with the same parcel ID</td></tr>
+  <tr><td>Closest pair line</td><td><code>&lt;Polyline&gt;</code></td><td>Dashed amber line between the two closest points</td></tr>
+  <tr><td>Popups</td><td><code>&lt;Popup&gt;</code></td><td>Info shown when clicking a marker or line</td></tr>
+</table>
+
+<h4>Custom marker icons:</h4>
+<pre><span class="cm">// Regular point (small indigo dot)</span>
+<span class="kw">const</span> defaultIcon = <span class="kw">new</span> L.<span class="fn">DivIcon</span>({
+  html: <span class="str">'&lt;div style="width:10px;height:10px;border-radius:50%;background:#6366f1;"&gt;&lt;/div&gt;'</span>
+});
+
+<span class="cm">// Closest point A (larger green dot with glow)</span>
+<span class="kw">const</span> closestIconA = <span class="kw">new</span> L.<span class="fn">DivIcon</span>({
+  html: <span class="str">'&lt;div style="width:16px;height:16px;border-radius:50%;background:#10b981;box-shadow:0 0 12px rgba(16,185,129,0.6);"&gt;&lt;/div&gt;'</span>
+});
+
+<span class="cm">// Closest point B (larger red dot with glow)</span>
+<span class="kw">const</span> closestIconB = <span class="kw">new</span> L.<span class="fn">DivIcon</span>({
+  html: <span class="str">'&lt;div style="...background:#f43f5e;..."&gt;&lt;/div&gt;'</span>
+});</pre>
+
+<h4>Auto-fit bounds (FitBounds sub-component):</h4>
+<pre><span class="cm">// Automatically zoom the map to show all points</span>
+<span class="kw">function</span> <span class="fn">FitBounds</span>({ points }) {
+  <span class="kw">const</span> map = <span class="fn">useMap</span>();  <span class="cm">// Get reference to the Leaflet map</span>
+
+  <span class="fn">useEffect</span>(() => {
+    <span class="kw">const</span> bounds = L.<span class="fn">latLngBounds</span>(points.<span class="fn">map</span>(p => [p.lat, p.lon]));
+    map.<span class="fn">fitBounds</span>(bounds, { padding: [<span class="num">50</span>, <span class="num">50</span>] });
+    <span class="cm">// ↑ Zoom to fit all points with 50px padding</span>
+  }, [points]);
+
+  <span class="kw">return null</span>;  <span class="cm">// This component renders nothing — it just controls the map</span>
+}</pre>
+
+<div class="page-break"></div>
+
+<h3>9d. ResultsPanel.jsx — Displaying Results</h3>
+
+<p>Shows parse statistics and the closest pair result in the sidebar.</p>
+
+<h4>What it displays:</h4>
+<ul>
+  <li><strong>Parse Summary</strong> — 4 colored stat cards (Total Lines, Valid Points, Skipped, Parcels)</li>
+  <li><strong>Skipped Lines</strong> — Expandable details showing why lines were skipped</li>
+  <li><strong>Closest Pair</strong> — Distance, coordinates of both points, computation time</li>
+</ul>
+
+<h4>Distance formatting:</h4>
+<pre><span class="kw">const</span> <span class="fn">formatDist</span> = (meters) => {
+  <span class="kw">if</span> (meters >= <span class="num">1000</span>) {
+    <span class="kw">return</span> <span class="str">`${(meters / 1000).toFixed(3)} km`</span>;   <span class="cm">// e.g., "2.836 km"</span>
+  }
+  <span class="kw">return</span> <span class="str">`${meters.toFixed(2)} m`</span>;                  <span class="cm">// e.g., "127.45 m"</span>
+};</pre>
+
+<h3>9e. Sidebar.jsx — The Layout Shell</h3>
+<p>Wraps all sidebar content (Upload, Results, Legend) with a header and dark mode toggle.</p>
+
+<h3>9f. Legend.jsx &amp; LoadingSpinner.jsx</h3>
+<p><strong>Legend</strong> shows what each color/shape means on the map. <strong>LoadingSpinner</strong> shows an animated circle while the app is processing.</p>
+
+<div class="page-break"></div>
+
+<!-- ===================== SECTION 10 ===================== -->
+<h2>10. Styling — CSS &amp; Tailwind</h2>
+
+<h3>How Tailwind Works</h3>
+<p>Instead of writing separate CSS files, Tailwind lets you add styles directly via class names:</p>
+
+<pre><span class="cm">&lt;!-- Traditional CSS approach --&gt;</span>
+&lt;div class=<span class="str">"my-card"</span>&gt;...&lt;/div&gt;
+<span class="cm">/* Then in a CSS file: */</span>
+.my-card { background: white; padding: 16px; border-radius: 12px; }
+
+<span class="cm">&lt;!-- Tailwind approach (styles right in the HTML!) --&gt;</span>
+&lt;div class=<span class="str">"bg-white p-4 rounded-xl"</span>&gt;...&lt;/div&gt;</pre>
+
+<h4>Common Tailwind classes used in this project:</h4>
+<table>
+  <tr><th>Class</th><th>What It Does</th></tr>
+  <tr><td><code>flex</code></td><td>Makes the element a flexbox container</td></tr>
+  <tr><td><code>items-center</code></td><td>Centers children vertically</td></tr>
+  <tr><td><code>gap-3</code></td><td>Adds 12px gap between children</td></tr>
+  <tr><td><code>p-4</code></td><td>Adds 16px padding on all sides</td></tr>
+  <tr><td><code>rounded-xl</code></td><td>Rounded corners (12px radius)</td></tr>
+  <tr><td><code>text-sm</code></td><td>Small text (14px)</td></tr>
+  <tr><td><code>font-bold</code></td><td>Bold text (font-weight: 700)</td></tr>
+  <tr><td><code>bg-brand-500</code></td><td>Our custom indigo background</td></tr>
+  <tr><td><code>dark:bg-slate-900</code></td><td>Dark mode background (dark gray)</td></tr>
+  <tr><td><code>hover:scale-110</code></td><td>Grows 10% on hover</td></tr>
+  <tr><td><code>transition-all</code></td><td>Smooth animation for all property changes</td></tr>
+  <tr><td><code>lg:w-[380px]</code></td><td>380px width on large screens</td></tr>
+</table>
+
+<h3>Custom CSS (index.css)</h3>
+<p>The <code>index.css</code> file contains:</p>
+<ul>
+  <li><strong>Tailwind directives</strong> — <code>@tailwind base; @tailwind components; @tailwind utilities;</code></li>
+  <li><strong>Leaflet dark mode overrides</strong> — Changes popup and control colors for dark mode</li>
+  <li><strong>Custom animations</strong> — fadeInUp, pulse, spin for loading states</li>
+  <li><strong>Glassmorphism</strong> — Semi-transparent backgrounds with blur effect</li>
+  <li><strong>Cluster marker styles</strong> — Custom colors for grouped markers</li>
+</ul>
+
+<div class="page-break"></div>
+
+<!-- ===================== SECTION 11 ===================== -->
+<h2>11. Key React Concepts Explained</h2>
+
+<h3>What is a Component?</h3>
+<p>A component is a <strong>reusable piece of UI</strong>. Each component is a JavaScript function that returns JSX (HTML-like code).</p>
+<pre><span class="cm">// A simple component</span>
+<span class="kw">function</span> <span class="fn">Greeting</span>({ name }) {
+  <span class="kw">return</span> &lt;h1&gt;Hello, {name}!&lt;/h1&gt;;
+}
+
+<span class="cm">// Using it</span>
+&lt;<span class="fn">Greeting</span> name=<span class="str">"Farhan"</span> /&gt;    <span class="cm">// Renders: &lt;h1&gt;Hello, Farhan!&lt;/h1&gt;</span></pre>
+
+<h3>What is State? (useState)</h3>
+<p>"State" is data that can <strong>change over time</strong>. When state changes, React re-renders the component.</p>
+<pre><span class="kw">const</span> [count, setCount] = <span class="fn">useState</span>(<span class="num">0</span>);  <span class="cm">// count starts at 0</span>
+
+<span class="cm">// When you call setCount(5), React:</span>
+<span class="cm">//   1. Updates count to 5</span>
+<span class="cm">//   2. Re-renders the component with the new value</span>
+<span class="cm">//   3. The screen updates automatically!</span></pre>
+
+<h3>What is useEffect?</h3>
+<p>Runs code <strong>after</strong> the component renders. Used for side effects like fetching data, setting up listeners, or changing the DOM.</p>
+<pre><span class="fn">useEffect</span>(() => {
+  document.title = <span class="str">'New Title'</span>;   <span class="cm">// Runs after render</span>
+}, [someVariable]);                   <span class="cm">// Only re-runs when someVariable changes</span></pre>
+
+<h3>What is useCallback?</h3>
+<p>Prevents functions from being re-created on every render. Important for performance.</p>
+<pre><span class="cm">// Without useCallback: new function created every render</span>
+<span class="kw">const</span> handleClick = () => { ... };
+
+<span class="cm">// With useCallback: same function reused unless dependencies change</span>
+<span class="kw">const</span> handleClick = <span class="fn">useCallback</span>(() => { ... }, []);</pre>
+
+<h3>What is useRef?</h3>
+<p>Holds a reference to a DOM element or a value that persists across renders without causing re-renders.</p>
+<pre><span class="kw">const</span> inputRef = <span class="fn">useRef</span>(<span class="kw">null</span>);
+
+<span class="cm">// Later, you can access the DOM element:</span>
+inputRef.current.<span class="fn">click</span>();   <span class="cm">// Programmatically click the input</span></pre>
+
+<h3>What are Props?</h3>
+<p>Props are <strong>data passed from parent to child</strong>. Like function arguments!</p>
+<pre><span class="cm">// Parent passes data</span>
+&lt;<span class="fn">ResultsPanel</span> closestPair={pair} computeTime={<span class="num">42</span>} /&gt;
+
+<span class="cm">// Child receives it</span>
+<span class="kw">function</span> <span class="fn">ResultsPanel</span>({ closestPair, computeTime }) {
+  <span class="kw">return</span> &lt;p&gt;Time: {computeTime}ms&lt;/p&gt;;
+}</pre>
+
+<div class="page-break"></div>
+
+<!-- ===================== SECTION 12 ===================== -->
+<h2>12. How to Run the App</h2>
+
+<h3>Prerequisites</h3>
+<p>You need <strong>Node.js</strong> installed on your computer. Download it from <a href="https://nodejs.org">nodejs.org</a>.</p>
+
+<h3>Steps</h3>
+<pre><span class="cm"># 1. Open a terminal in the project folder</span>
+cd c:\Users\acer\OneDrive\Desktop\farhan
+
+<span class="cm"># 2. Install all dependencies (reads package.json)</span>
+npm install
+
+<span class="cm"># 3. Start the development server</span>
+npm run dev
+
+<span class="cm"># 4. Open in browser</span>
+<span class="cm"># → http://localhost:5173</span></pre>
+
+<h3>To Build for Production</h3>
+<pre><span class="cm"># Creates optimized files in the dist/ folder</span>
+npm run build</pre>
+
+<div class="page-break"></div>
+
+<!-- ===================== SECTION 13 ===================== -->
+<h2>13. Sample Test File</h2>
+
+<p>The project includes a <code>public/sample-data.txt</code> file with 20 coordinate points across 5 parcels in New York City:</p>
+
+<div class="file-label">public/sample-data.txt</div>
+<pre>lat,lon,parcel_id        <span class="cm">← Header row (auto-detected & skipped)</span>
+40.7128,-74.0060,A1      <span class="cm">← Parcel A1 (Lower Manhattan)</span>
+40.7138,-74.0055,A1
+40.7145,-74.0065,A1
+40.7135,-74.0075,A1
+40.7580,-73.9855,B1      <span class="cm">← Parcel B1 (Central Park area)</span>
+40.7590,-73.9845,B1
+40.7600,-73.9860,B1
+40.7585,-73.9870,B1
+40.7489,-73.9680,C1      <span class="cm">← Parcel C1 (UN Headquarters area)</span>
+40.7495,-73.9670,C1
+40.7505,-73.9685,C1
+40.7492,-73.9695,C1
+40.7300,-73.9950,D1      <span class="cm">← Parcel D1 (Greenwich Village)</span>
+40.7310,-73.9940,D1
+40.7320,-73.9955,D1
+40.7305,-73.9965,D1
+40.7061,-73.9969,E1      <span class="cm">← Parcel E1 (Brooklyn Bridge area)</span>
+40.7070,-73.9960,E1
+40.7078,-73.9975,E1
+40.7065,-73.9980,E1</pre>
+
+<h4>What happens when you upload this file:</h4>
+<ol>
+  <li>Parser reads 21 lines (1 header + 20 data lines)</li>
+  <li>Header "lat,lon,parcel_id" is auto-detected and skipped</li>
+  <li>All 20 data lines parse successfully (0 skipped)</li>
+  <li>5 parcels are detected (A1, B1, C1, D1, E1)</li>
+  <li>5 colored polygons are drawn on the map</li>
+  <li>The closest pair of points is highlighted with green + red markers</li>
+  <li>A dashed amber line connects the closest pair</li>
+</ol>
+
+<div class="separator"></div>
+
+<div style="text-align:center; padding: 40px 0;">
+  <h2 style="border:none; color: var(--brand);">🎉 That's Everything!</h2>
+  <p style="font-size: 16px; color: var(--text-light); max-width: 500px; margin: 0 auto;">
+    You now understand every file, every function, and every concept in the Parcel Boundary Analyzer. Happy coding!
+  </p>
+</div>
+
+</div>
+</body>
+</html>
